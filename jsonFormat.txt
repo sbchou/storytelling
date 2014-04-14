@@ -1,0 +1,13 @@
+format of json file:
+
+{
+  "nodes":[
+    {"name":"Myriel", "size":3000},
+    {"name":"Napoleon", "size":1000},
+    {"name":"Mlle.Baptistine", "size":500}
+  ],
+  "links":[
+    {"source":1,"target":0,"value":1},
+    {"source":2,"target":0,"value":8}
+  ]
+}
