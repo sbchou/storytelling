@@ -14,8 +14,10 @@
 	display:inline-block;
 }
 
-
-
+.link {
+	stroke: #999;
+	stroke-opacity: .9;
+}
 
 
 
