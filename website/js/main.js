@@ -12,9 +12,10 @@ var force = d3.layout.force()
 .linkDistance(80)
 .size([w, h]);
 
-$(dropdown).
+$('.dropdown-menu li a').click(function () {
+	alert($(this).text());
 
-d3.json("test.json", function(json) {
+	d3.json("test.json", function(json) {
 	force
 	.nodes(json.nodes)
 	.links(json.links)
@@ -51,3 +52,5 @@ d3.json("test.json", function(json) {
 		.attr("y", function(d) { return d.y; });
 	});
 });
+});
+
