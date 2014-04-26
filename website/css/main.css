@@ -5,7 +5,14 @@
    ========================================================================== */
 
 
+#jumbotron{
+	width:100%;
+	text-align: center;
+}
 
+#categories{
+	display:inline-block;
+}
 
 
 
