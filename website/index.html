@@ -3,47 +3,47 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-            body {
-                padding-top: 50px;
-                padding-bottom: 20px;
-            }
-        </style>
-        </style>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <style>
+  body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+  }
+  </style>
+</style>
+<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="css/main.css">
 
-        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-    </head>
-    <body>
+<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+</head>
+<body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Digitally Mediated Storytelling Final Project</a>
-        </div>
-      </div>
-    </div>
+            <![endif]-->
+            <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+              <div class="container">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="#">Digitally Mediated Storytelling Final Project</a>
+                </div>
+              </div>
+            </div>
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron" id="jumbotron">
-      <!-- Search bar -->
+            <!-- Main jumbotron for a primary marketing message or call to action -->
+            <div class="jumbotron" id="jumbotron">
+              <!-- Search bar -->
       <!-- <form class="form-inline" role="form" id="form-inline">
       	<div class="form-group">
       		<label class="sr-only" for="exampleInputEmail2">Query</label>
@@ -55,90 +55,38 @@
       <!-- Dropdown button -->
       <div class="btn-group" id="categories">
       	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-      	Select Category <span class="caret"></span>
-      	</button>
-      	<ul class="dropdown-menu" role="menu">
-      		<li><a href="#">World</a></li>
-      		<li><a href="#">U.S.</a></li>
-      		<li><a href="#">New York</a></li>
-      		<li><a href="#">Business</a></li>
-      		<li><a href="#">Opinion</a></li>
-      		<li><a href="#">Sports</a></li>
-      		<li><a href="#">Science</a></li>
-      		<li><a href="#">Arts</a></li>
-      		<li><a href="#">Fashion and Style</a></li>
-      		<li><a href="#">Video</a></li>
-      	</ul>
-      </div>
-
+         Select Category <span class="caret"></span>
+       </button>
+       <ul class="dropdown-menu" role="menu">
+        <li><a href="#">World</a></li>
+        <li><a href="#">U.S.</a></li>
+        <li><a href="#">New York</a></li>
+        <li><a href="#">Business</a></li>
+        <li><a href="#">Opinion</a></li>
+        <li><a href="#">Sports</a></li>
+        <li><a href="#">Science</a></li>
+        <li><a href="#">Arts</a></li>
+        <li><a href="#">Fashion and Style</a></li>
+        <li><a href="#">Video</a></li>
+      </ul>
     </div>
 
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script>
+  </div>
+  <div id="chart">
+  </div>
+<hr>
 
-    var w = 960,
-        h = 500,
-        fill = d3.scale.category20();
+<footer>
+  <p>&copy; Columbia University 2014</p>
+</footer>
+</div> <!-- /container -->        
 
-    var vis = d3.select("body").append("svg:svg")
-        .attr("width", w)
-        .attr("height", h);
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
 
-    var force = d3.layout.force()
-          .charge(-120)
-          .linkDistance(80)
-          .size([w, h]);
+<script src="js/vendor/bootstrap.min.js"></script>
 
-    d3.json("test.json", function(json) {
-      force
-          .nodes(json.nodes)
-          .links(json.links)
-          .start();
-
-      var link = vis.selectAll("line.link")
-          .data(json.links)
-        .enter().append("svg:line")
-          .attr("class", "link")
-          .style("stroke-width", function(d) { return Math.sqrt(d.value); })
-          .attr("x1", function(d) { return d.source.x; })
-          .attr("y1", function(d) { return d.source.y; })
-          .attr("x2", function(d) { return d.target.x; })
-          .attr("y2", function(d) { return d.target.y; });
-
-      var node = vis.selectAll("text.node")
-          .data(json.nodes) 
-        .enter().append("svg:text")
-          .attr("class", "node")
-          .attr("x", function(d) { return d.x; })
-          .attr("y", function(d) { return d.y; })
-          .text(function(d) { return d.name; })
-          .style("fill", "black")
-          .style("font", function(d) { return Math.sqrt(d.size / 2) + "px sans-serif"; })
-          .call(force.drag);
-
-      force.on("tick", function() {
-        link.attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
-
-        node.attr("x", function(d) { return d.x; })
-            .attr("y", function(d) { return d.y; });
-      });
-    });
-
-    </script>
-
-      <hr>
-
-      <footer>
-        <p>&copy; Columbia University 2014</p>
-      </footer>
-    </div> <!-- /container -->        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
-
-        <script src="js/vendor/bootstrap.min.js"></script>
-
-        <script src="js/main.js"></script>
-    </body>
+<script src="js/main.js"></script>
+</body>
 </html>
