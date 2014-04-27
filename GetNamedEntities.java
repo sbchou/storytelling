@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.Runtime;
 import java.lang.Process;
 import java.lang.InterruptedException;
@@ -9,64 +10,78 @@ public class GetNamedEntities
 {
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
-		Runtime r = Runtime.getRuntime();
-		Process p = r.exec("python ~/workspace/storytelling/GetArticles.py");
-		p.waitFor();
-		BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		String line = "";
+		int articleCount = 1121;
 
-		while((line = b.readLine()) != null) 
+		for(int i = 0; i < articleCount; i++)
 		{
-			System.out.println(line);
-		}
+			System.out.println("\nArticle " + i + "\n");
 
-		r = Runtime.getRuntime();
-		p = r.exec("/opt/stanford-ner/ner.sh /opt/stanford-ner/sample.txt");
-		p.waitFor();
-		b = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		line = "";
+			Runtime r = Runtime.getRuntime();
 
-		while((line = b.readLine()) != null) 
-		{
-			//System.out.println(line);
+			String article = "/home/dan/data/storytelling/articles/article_" + i + ".txt.";
+			String cmd = "/opt/stanford-ner/ner.sh " + article;
 
-			String[] array = line.split(" ");
+			//System.out.println(cmd);
 
-			String currentTag = "O";
-			String currentEntity = "";
+			Process p = r.exec(cmd);
 
-			for(String word : array)
+			p.waitFor();
+
+			BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+			String keywordsFile = "/home/dan/data/storytelling/keywords/keywords_" + i + ".txt";
+			PrintWriter writer = new PrintWriter(keywordsFile, "UTF-8");
+
+			String line = "";
+
+			while((line = b.readLine()) != null) 
 			{
-				//System.out.println(word);
+				//System.out.println(line);
 
-				String[] parts = word.split("/");
+				String[] array = line.split(" ");
 
-				String value = parts[0];
-				String tag = parts[1];
+				String currentTag = "O";
+				String currentEntity = "";
 
-				//System.out.println(tag + ": " + value);
-
-				if(!tag.equals("O"))
+				for(String word : array)
 				{
-					if(currentTag.equals("O"))
+					//System.out.println(word);
+
+					String[] parts = word.split("/");
+
+					String value = parts[0];
+					String tag = parts[1];
+
+					//System.out.println(tag + ": " + value);
+
+					if(!tag.equals("O"))
 					{
-						currentTag = tag;
-						currentEntity = value;
+						if(currentTag.equals("O"))
+						{
+							currentTag = tag;
+							currentEntity = value;
+						}
+						else
+						{
+							currentEntity += " " + value;
+						}
 					}
 					else
 					{
-						currentEntity += " " + value;
+						if(!currentEntity.isEmpty())
+						{
+							System.out.println(currentEntity);						
+
+							writer.println(currentEntity);
+						}
+
+						currentTag = "O";
+						currentEntity = "";
 					}
 				}
-				else
-				{
-					if(!currentEntity.isEmpty())
-						System.out.println(currentEntity);
-
-					currentTag = "O";
-					currentEntity = "";
-				}
 			}
+
+			writer.close();
 		}
 	}
 }
