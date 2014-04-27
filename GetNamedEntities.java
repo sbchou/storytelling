@@ -10,19 +10,20 @@ public class GetNamedEntities
 {
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
+		final String DEFAULT_TAG = "O";
+
 		int articleCount = 1121;
+
+		System.out.println("Processing " + articleCount + " articles");
 
 		for(int i = 0; i < articleCount; i++)
 		{
-			System.out.println("\nArticle " + i + "\n");
+			System.out.println("\nArticle " + (i+1) + " of " + articleCount + "\n");
 
-			Runtime r = Runtime.getRuntime();
-
-			String article = "/home/dan/data/storytelling/articles/article_" + i + ".txt.";
+			String article = "/home/dan/data/storytelling/articles/article_" + i + ".txt";
 			String cmd = "/opt/stanford-ner/ner.sh " + article;
 
-			//System.out.println(cmd);
-
+			Runtime r = Runtime.getRuntime();
 			Process p = r.exec(cmd);
 
 			p.waitFor();
@@ -36,27 +37,21 @@ public class GetNamedEntities
 
 			while((line = b.readLine()) != null) 
 			{
-				//System.out.println(line);
-
 				String[] array = line.split(" ");
 
-				String currentTag = "O";
+				String currentTag = DEFAULT_TAG;
 				String currentEntity = "";
 
 				for(String word : array)
 				{
-					//System.out.println(word);
-
 					String[] parts = word.split("/");
 
 					String value = parts[0];
 					String tag = parts[1];
 
-					//System.out.println(tag + ": " + value);
-
-					if(!tag.equals("O"))
+					if(!tag.equals(DEFAULT_TAG))
 					{
-						if(currentTag.equals("O"))
+						if(currentTag.equals(DEFAULT_TAG))
 						{
 							currentTag = tag;
 							currentEntity = value;
@@ -75,9 +70,16 @@ public class GetNamedEntities
 							writer.println(currentEntity);
 						}
 
-						currentTag = "O";
+						currentTag = DEFAULT_TAG;
 						currentEntity = "";
 					}
+				}
+
+				if(!currentEntity.isEmpty())
+				{
+					System.out.println(currentEntity);						
+
+					writer.println(currentEntity);
 				}
 			}
 
