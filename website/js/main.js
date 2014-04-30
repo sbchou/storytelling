@@ -1,6 +1,6 @@
 
 var w = 960,
-h = 500,
+h = 600,
 fill = d3.scale.category20();
 
 var vis = d3.select("#chart").append("svg:svg")
@@ -8,8 +8,8 @@ var vis = d3.select("#chart").append("svg:svg")
 .attr("height", h);
 
 var force = d3.layout.force()
-.charge(-120)
-.linkDistance(250)
+.charge(-150)
+.linkDistance(300)
 .size([w, h]);
 
 var data = {};
@@ -24,7 +24,6 @@ $('.dropdown-menu li a').click(function () {
 		},
 		function(counts) {
 			data.nodes = counts;
-			console.log(data);
 
 			d3.csv("keyword_connections.csv",
 				function(d) {
@@ -46,7 +45,7 @@ $('.dropdown-menu li a').click(function () {
 					.data(data.links)
 					.enter().append("svg:line")
 					.attr("class", "link")
-					.style("stroke-width", function(d) { return Math.sqrt(d.value / 2); })
+					.style("stroke-width", function(d) { return d.value / 5; })
 					.attr("x1", function(d) { return d.source.x; })
 					.attr("y1", function(d) { return d.source.y; })
 					.attr("x2", function(d) { return d.target.x; })
