@@ -18,36 +18,36 @@ public class CountConnections
 {
 	private static final String[][] keywords = new String[][]
 	{
-		{"New York Times", "The New York Times", "NY Times", "NYTimes", "The Times"},
-		{"United States", "U.S.", "US", "U.S.A.", "USA"},
-		{"New York", "New York City", "NY", "N.Y.", "NYC", "N.Y.C."},
-		{"Ford"},
+		{"CNN"},
+		{"United States", "U.S.", "US", "U.S.A.", "USA", "America", "American", "Americans"},
+		{"Anderson Cooper", "Anderson", "Cooper"},
 		{"Obama", "Barack Obama", "Barack H. Obama", "President Obama", "Obama Administration", "The Obama Administration", "Obama White House", "The Obama White House"},
-		{"China", "Chinese"},
-		{"America", "American", "Americans"},
-		{"Russia", "Russian"},
-		{"Ukraine", "Ukrainian"},
-		{"Honda"},
-		{"Nissan"},
-		{"Toyota"},
+		{"New York", "New York City", "NY", "N.Y.", "NYC", "N.Y.C."},
+		{"Facebook", "facebook.com"},
 		{"Washington", "DC", "Washington DC"},
-		{"Microsoft"},
-		{"Facebook"},
-		{"General Motors", "GM"},
-		{"Los Angeles", "LA"},
-		{"Audi"},
 		{"California", "Californian", "Californians"},
-		{"Manhattan"},
-		{"Mazda"},
+		{"United Kingdom", "UK", "U.K.", "Britain", "British", "England"},
+		{"Russia", "Russian", "Russians"},
+		{"China", "Chinese"},
 		{"Europe", "European"},
-		{"Hyundai"},
-		{"BMW"},
-		{"Libya", "Libyan"},
-		{"Chrysler"},
-		{"San Francisco", "SF"},
-		{"Brooklyn"},
-		{"London"},
-		{"Israel", "Israeli"}
+		{"Google", "google.com"},
+		{"London", "Londoners"},
+		{"Texas", "Texan", "Texans"},
+		{"Congress", "US Congress", "U.S. Congress"},
+		{"South Korea", "South Korean", "South Koreans"},
+		{"Ukraine", "Ukrainian"},
+		{"Malaysia", "Malaysian", "Malaysians"},
+		{"Atlanta", "Atlantan", "Atlantans"},
+		{"Israel", "Israeli"},
+		{"Florida", "Floridian", "Floridians"},
+		{"Los Angeles", "LA", "L.A."},
+		{"Japan", "Japanese"},
+		{"Chicago", "Chicagoans"},
+		{"India", "Indian", "Indians"},
+		{"Supreme Court", "US Supreme Court", "U.S. Supreme Court"},	
+		{"Canada", "Canadian", "Candians"},
+		{"Boston", "Bostonian", "Bostonians"},
+		{"Australia", "Australian", "Australians"}
 	};
 
 	private static boolean matches(int i, String str)
@@ -101,13 +101,17 @@ public class CountConnections
 
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
-		int articleCount = 1121;
+		int articleCount = Integer.valueOf(args[0]);
+		String dataLocation = args[1];
+
+		//int articleCount = 1121;
 
 		Map<String, Integer> counts = new HashMap<String, Integer>();
 
 		for(int i = 0; i < articleCount; i++)
 		{
-			String filename = "/home/dan/data/storytelling/keywords/keywords_" + i + ".txt";
+			//String filename = "/home/dan/data/storytelling/keywords/keywords_" + i + ".txt";
+			String filename = dataLocation + "/keywords/keywords_" + i + ".txt";
 			String cmd = "cat " + filename;
 
 			System.out.println(filename);
@@ -129,8 +133,6 @@ public class CountConnections
 
 			for(int x = 0; x < indexes.size(); x++)
 			{
-				System.out.print(indexes.get(x) + " ");
-
 				for(int y = x + 1; y < indexes.size(); y++)
 				{
 					int i1 = indexes.get(x);
@@ -144,13 +146,11 @@ public class CountConnections
 						counts.put(key, 1);
 				}
 			}
-
-			System.out.println();
 		}
 
 		Map<String, Integer> sortedCounts = sortByValue(counts);
 
-		String countsFile = "/home/dan/data/storytelling/connections/connections.txt";
+		String countsFile = dataLocation + "/connections.csv";
 		PrintWriter writer = new PrintWriter(countsFile, "UTF-8");
 			
 		for(String str : sortedCounts.keySet())
@@ -163,11 +163,12 @@ public class CountConnections
 			String keyword1 = keywords[i1][0];
 			String keyword2 = keywords[i2][0];
 
-			System.out.println(keyword1 + "," + keyword2 + "," + sortedCounts.get(str));
 			writer.println(str + "," + sortedCounts.get(str));
 		}
 
 		writer.close();
+
+		System.out.println(sortedCounts.size() + " connections counted in " + countsFile);
 	}
 
 	static Map sortByValue(Map map) {

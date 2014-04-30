@@ -18,13 +18,17 @@ public class CountKeywords
 {
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
-		int articleCount = 1121;
+		int articleCount = Integer.valueOf(args[0]);
+		String dataLocation = args[1];
+
+		//int articleCount = 2630;
 
 		Map<String, Integer> counts = new HashMap<String, Integer>();
 
 		for(int i = 0; i < articleCount; i++)
 		{
-			String filename = "/home/dan/data/storytelling/keywords/keywords_" + i + ".txt";
+			//String filename = "/home/dan/data/storytelling/keywords/keywords_" + i + ".txt";
+			String filename = dataLocation + "/keywords/keywords_" + i + ".txt";
 			String cmd = "cat " + filename;
 
 			System.out.println(filename);
@@ -36,31 +40,38 @@ public class CountKeywords
 
 			BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
+			List<String> list = new LinkedList<String>();
+
 			String line = "";
 
 			while((line = b.readLine()) != null) 
 			{
-				//System.out.println(line);
+				String keyword = line.toLowerCase();
 
-				if(counts.containsKey(line))
-					counts.put(line, counts.get(line) + 1);
+				if(!list.contains(keyword))
+					list.add(keyword);
+			}
+
+			for(String keyword : list)
+			{
+				if(counts.containsKey(keyword))
+					counts.put(keyword, counts.get(keyword) + 1);
 				else
-					counts.put(line, 1);
+					counts.put(keyword, 1);
 			}
 		}
 
 		Map<String, Integer> sortedCounts = sortByValue(counts);
 
-		String countsFile = "/home/dan/data/storytelling/counts/counts.txt";
+		String countsFile = dataLocation + "/counts.csv";
 		PrintWriter writer = new PrintWriter(countsFile, "UTF-8");
 			
 		for(String str : sortedCounts.keySet())
-		{
-			System.out.println(str + ": " + sortedCounts.get(str));
 			writer.println("\"" + str + "\"," + sortedCounts.get(str));
-		}
 
 		writer.close();
+
+		System.out.println(sortedCounts.size() + " keywords counted in " + countsFile);
 	}
 
 	static Map sortByValue(Map map) {
