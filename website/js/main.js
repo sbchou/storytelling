@@ -18,7 +18,7 @@ $('.dropdown-menu li a').click(function () {
 	data = {nodes: [], links: []};
 	remove(data);
 
-	if ($(this).text() == 'The New York Times') {
+	if ($(this).text() === 'The New York Times') {
 		d3.csv("nytimes_top_20_keywords.csv", 
 			function(d) {
 				return {
@@ -43,7 +43,7 @@ $('.dropdown-menu li a').click(function () {
 						start(data);
 				});
 		});
-	} else if ($(this).text() == 'The Washington Post') {
+	} else if ($(this).text() === 'The Washington Post') {
 		d3.csv("washingtonpost_top_20_keywords.csv", 
 			function(d) {
 				return {
@@ -68,7 +68,7 @@ $('.dropdown-menu li a').click(function () {
 						start(data);
 				});
 		});
-	} else if ($(this).text() == 'CNN') {
+	} else if ($(this).text() === 'CNN') {
 		d3.csv("cnn_top_20_keywords.csv", 
 			function(d) {
 				return {
@@ -136,8 +136,21 @@ var start = function (data) {
 		.attr("y", function(d) { return d.y; })
 		.text(function(d) { return d.name; })
 		.style("fill", "black")
-		.style("font", function(d) { return Math.sqrt(d.size) * 1.5 + "px sans-serif"; })
+		.style("font", function(d) { return Math.sqrt(d.size) * 2 + "px sans-serif"; })
 		.call(force.drag);
+
+	node.on('mouseover', function(d) {
+		link.style('stroke', function(l) {
+			if (d === l.source || d === l.target)
+				return '#FF0000';
+			else
+				return '#999';
+		});
+	});
+
+	node.on('mouseout', function() {
+		link.style('stroke', '#999');
+	});
 
 	force.on("tick", function() {
 		link.attr("x1", function(d) { return d.source.x; })
